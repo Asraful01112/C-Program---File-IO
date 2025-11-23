@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char srcFile[260], destFile[260];
+    FILE *src, *dest;
+    int ch;
+
+    printf("Enter source file name: ");
+    scanf("%259s", srcFile);
+
+    printf("Enter destination file name: ");
+    scanf("%259s", destFile);
+
+    src = fopen(srcFile, "r");
+    if (src == NULL) {
+        printf("Error: Could not open source file!\n");
+        return 1;
+    }
+
+    dest = fopen(destFile, "a");
+    if (dest == NULL) {
+        printf("Error: Could not open destination file!\n");
+        fclose(src);
+        return 1;
+    }
+
+    while ((ch = fgetc(src)) != EOF) {
+        fputc(ch, dest);
+    }
+
+    printf("Content appended successfully.\n");
+
+    fclose(src);
+    fclose(dest);
+
+    return 0;
+}
