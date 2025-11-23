@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <string.h>
+#include <windows.h>
+
+int main() {
+    char filename[260];
+
+    printf("Enter file name (with path if needed): ");
+    fgets(filename, sizeof(filename), stdin);
+
+    filename[strcspn(filename, "\n")] = '\0';
+
+
+    DWORD attr = GetFileAttributesA(filename);
+    if (attr == INVALID_FILE_ATTRIBUTES) {
+        printf("Error: Could not access the file!\n");
+        return 1;
+    }
+
+    DWORD newAttr = attr | FILE_ATTRIBUTE_READONLY;
+
+    if (SetFileAttributesA(filename, newAttr)) {
+        printf("File is now read-only.\n");
+    } else {
+        printf("Failed to change file attributes.\n");
+    }
+
+    return 0;
+}
