@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main() {
+    FILE *temp;
+
+    temp = tmpfile();
+
+    if (temp == NULL) {
+        printf("Unable to create temporary file!\n");
+        return 1;
+    }
+
+    fputs("This is temporary data.\n", temp);
+
+    rewind(temp);
+
+    char ch;
+    printf("Reading from temporary file:\n");
+    while ((ch = fgetc(temp)) != EOF) {
+        putchar(ch);
+    }
+
+    fclose(temp);
+
+    return 0;
+}
