@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "unzip.h"
+
+int main() {
+    unzFile zipFile;
+    unz_global_info globalInfo;
+    unz_file_info fileInfo;
+    char filename[256];
+
+    zipFile = unzOpen("test.zip");
+    if (zipFile == NULL) {
+        printf("Error: Cannot open ZIP file.\n");
+        return 1;
+    }
+
+    if (unzGetGlobalInfo(zipFile, &globalInfo) != UNZ_OK) {
+        printf("Error: Cannot read global info.\n");
+        unzClose(zipFile);
+        return 1;
+    }
+
+    printf("ZIP contains %lu files:\n\n", globalInfo.number_entry);
+
+    if (unzGoToFirstFile(zipFile) != UNZ_OK) {
+        printf("Error: Cannot find first file.\n");
+        unzClose(zipFile);
+        return 1;
+    }
+
+    for (uLong i = 0; i < globalInfo.number_entry; i++) {
+
+        if (unzGetCurrentFileInfo(zipFile, &fileInfo, filename, sizeof(filename),
+                                  NULL, 0, NULL, 0) != UNZ_OK) {
+            printf("Error reading file info.\n");
+            break;
+        }
+
+        printf("File %lu: %s\n", i + 1, fi
